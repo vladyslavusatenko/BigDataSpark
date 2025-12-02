@@ -54,12 +54,15 @@ class SparkConfig:
             .master(master) \
             .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension") \
             .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog") \
-            .config("spark.driver.memory", "4g") \
-            .config("spark.executor.memory", "4g") \
-            .config("spark.sql.shuffle.partitions", "200") \
-            .config("spark.default.parallelism", "100") \
+            .config("spark.driver.memory", "8g") \
+            .config("spark.executor.memory", "8g") \
+            .config("spark.driver.maxResultSize", "4g") \
+            .config("spark.sql.shuffle.partitions", "100") \
+            .config("spark.default.parallelism", "50") \
             .config("spark.sql.adaptive.enabled", "true") \
-            .config("spark.sql.adaptive.coalescePartitions.enabled", "true")
+            .config("spark.sql.adaptive.coalescePartitions.enabled", "true") \
+            .config("spark.memory.offHeap.enabled", "true") \
+            .config("spark.memory.offHeap.size", "2g")
 
         # Windows-specific configurations
         if platform.system() == 'Windows':
@@ -114,13 +117,16 @@ class SparkConfig:
 # Spark SQL optimization configurations
 SPARK_CONFIGS = {
     # Memory Management
-    "spark.driver.memory": "4g",
-    "spark.executor.memory": "4g",
+    "spark.driver.memory": "8g",
+    "spark.executor.memory": "8g",
+    "spark.driver.maxResultSize": "4g",
     "spark.memory.fraction": "0.8",
     "spark.memory.storageFraction": "0.3",
+    "spark.memory.offHeap.enabled": "true",
+    "spark.memory.offHeap.size": "2g",
 
     # Shuffle Optimization
-    "spark.sql.shuffle.partitions": "200",
+    "spark.sql.shuffle.partitions": "100",
     "spark.shuffle.file.buffer": "64k",
     "spark.reducer.maxSizeInFlight": "96m",
 
@@ -130,7 +136,7 @@ SPARK_CONFIGS = {
     "spark.sql.adaptive.skewJoin.enabled": "true",
 
     # Performance
-    "spark.default.parallelism": "100",
+    "spark.default.parallelism": "50",
     "spark.sql.files.maxPartitionBytes": "128MB",
     "spark.sql.autoBroadcastJoinThreshold": "10MB",
 
